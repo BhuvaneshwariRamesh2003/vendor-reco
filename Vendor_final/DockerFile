@@ -1,25 +1,21 @@
-# Use a lightweight Python base image
-FROM python:3.10-slim
+# Use official Python base image
+FROM python:3.9
 
-# Create folders inside the image
-RUN mkdir -p /app/src/
-RUN mkdir -p /app/data/
-RUN mkdir -p /app/model/
+# Create app directories
+RUN mkdir -p /app/src
+RUN mkdir -p /app/model
+RUN mkdir -p /app/data
 
 # Set working directory
-WORKDIR /app/src/
+WORKDIR /app/src
 
-# Copy source code and dependency list
-COPY app.py .
-COPY ../requirements.txt .
-COPY ../VENDOR_FINAL.xlsx /app/data/
+# Copy files into container
+COPY app.py /app/src/
+COPY requirements.txt /app/src/
+COPY VENDOR_FINAL.xlsx /app/data/
 
-# Install Python packages
+# Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Set full access permissions for SAP AI Core
-RUN chgrp -R 65534 /app && \
-    chmod -R 777 /app
-
-# Default command to run the model script
+# Set default command
 CMD ["python", "app.py"]
