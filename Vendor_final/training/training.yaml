@@ -1,28 +1,18 @@
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate
+apiVersion: ai.sap.com/v1alpha1
+kind: TrainingTemplate
 metadata:
-  name: code-pipeline
+  name: vendor-reco-train
   annotations:
-    scenarios.ai.sap.com/description: "Vendor Recommendation Training Pipeline"
+    ext.ai.sap.com/islm_executable_type: "train"
+    ext.ai.sap.com/islm_released_version: "true"
     scenarios.ai.sap.com/name: "vendor-recommendation"
-    executables.ai.sap.com/description: "Train model for vendor recommendation"
-    executables.ai.sap.com/name: "Vendor Reco (RF Model)"
-  labels:
-    scenarios.ai.sap.com/id: "vendor-recommendation"
-    ai.sap.com/version: "2.0"
+    scenarios.ai.sap.com/description: "Train the vendor recommendation model using Random Forest"
 spec:
-  imagePullSecrets:
-    - name: bhuni  # Docker registry secret name
-  entrypoint: mypipeline
-  templates:
-    - name: mypipeline
-      steps:
-        - - name: train-model
-            template: vendor-reco-step
-
-    - name: vendor-reco-step
-      container:
-        image: docker.io/bhuni/vendor-final-app:latest # Your image
-        command: ["/bin/sh", "-c"]
-        args:
-          - "python /app/src/app.py"
+  image: docker.io/bhuni/vendor-final-app:latest
+  command:
+    - python
+    - /app/src/app.py
+  resources:
+    limits:
+      memory: 4Gi
+      cpu: 2
