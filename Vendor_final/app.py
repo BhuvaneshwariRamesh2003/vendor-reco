@@ -8,7 +8,7 @@ from sklearn.model_selection import train_test_split, RandomizedSearchCV
 from sklearn.metrics import accuracy_score, classification_report
 
 # Load dataset
-df = pd.read_excel("VENDOR_FINAL.xlsx")
+df = pd.read_excel("/app/data/VENDOR_FINAL.xlsx")
 
 # Ensure 'Selected' column exists for positives
 df['Selected'] = 1
@@ -124,3 +124,4 @@ new_request = {
 print("\n🎯 Top Recommended Vendors:")
 top_vendors = recommend_vendors(new_request, vendors, preprocessor, best_model, top_n=5)
 print(top_vendors)
+
