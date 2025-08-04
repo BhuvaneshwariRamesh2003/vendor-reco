@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: vendor-serving-pipeline  # <== This is your executable_id for serving
+  annotations:
+    scenarios.ai.sap.com/description: "Serve vendor recommendation model as REST API"
+    scenarios.ai.sap.com/name: "vendor-recommendation"
+    executables.ai.sap.com/description: "Serve vendor model"
+    executables.ai.sap.com/name: "Vendor Reco Serve"
+  labels:
+    scenarios.ai.sap.com/id: "vendor-recommendation"
+    ai.sap.com/version: "2.0"
+spec:
+  imagePullSecrets:
+    - name: bhuni
+  entrypoint: servepipeline
+  templates:
+    - name: servepipeline
+      steps:
+        - - name: serve-model
+            template: vendor-reco-serve
+
+    - name: vendor-reco-serve
+      container:
+        image: docker.io/bhuni/vendor-final-app:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - "python /app/src/app.py"
+        ports:
+          - containerPort: 8080
