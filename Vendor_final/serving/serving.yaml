@@ -9,7 +9,7 @@ metadata:
     scenarios.ai.sap.com/name: "vendor-recommendation"
     scenarios.ai.sap.com/description: "Serve the vendor recommendation model as a REST API"
 spec:
-  image: docker.io/bhuni/vendor-reco-app:latest
+  image: docker.io/bhuni/vendor-final-app:latest
   ports:
     - containerPort: 8080
   resources:
