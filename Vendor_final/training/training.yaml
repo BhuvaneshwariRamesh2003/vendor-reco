@@ -1,0 +1,18 @@
+apiVersion: ai.sap.com/v1alpha1
+kind: TrainingTemplate
+metadata:
+  name: vendor-reco-train
+  annotations:
+    ext.ai.sap.com/islm_executable_type: "train"
+    ext.ai.sap.com/islm_released_version: "true"
+    scenarios.ai.sap.com/name: "vendor-recommendation"
+    scenarios.ai.sap.com/description: "Train the vendor recommendation model using Random Forest"
+spec:
+  image: docker.io/bhuni/vendor-reco-app:latest
+  command:
+    - python
+    - app.py
+  resources:
+    limits:
+      memory: 4Gi
+      cpu: 2
