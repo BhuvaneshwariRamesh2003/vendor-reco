@@ -1,0 +1,28 @@
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: code-pipeline
+  annotations:
+    scenarios.ai.sap.com/description: "Vendor Recommendation Training Pipeline"
+    scenarios.ai.sap.com/name: "vendor-recommendation"
+    executables.ai.sap.com/description: "Train model for vendor recommendation"
+    executables.ai.sap.com/name: "Vendor Reco (RF Model)"
+  labels:
+    scenarios.ai.sap.com/id: "vendor-recommendation"
+    ai.sap.com/version: "2.0"
+spec:
+  imagePullSecrets:
+    - name: bhuni
+  entrypoint: mypipeline
+  templates:
+    - name: mypipeline
+      steps:
+        - - name: train-model
+            template: vendor-reco-step
+
+    - name: vendor-reco-step
+      container:
+        image: docker.io/bhuni/vendor-final-app:latest
+        command: ["/bin/sh", "-c"]
+        args:
+          - "python /app/src/app.py"
