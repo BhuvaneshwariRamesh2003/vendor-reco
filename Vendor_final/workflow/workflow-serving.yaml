@@ -1,4 +1,4 @@
-aapiVersion: argoproj.io/v1alpha1
+apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
   name: vendor-serving-pipeline  # <--- This must match executable_id in config.create()
