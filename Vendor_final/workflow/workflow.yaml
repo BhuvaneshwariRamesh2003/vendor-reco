@@ -1,18 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: code-pipeline
+  name: code-pipeline  # ✅ Executable ID, used in SDK
   annotations:
-    scenarios.ai.sap.com/description: "Vendor Recommendation Training Pipeline"
     scenarios.ai.sap.com/name: "vendor-recommendation"
-    executables.ai.sap.com/description: "Train model for vendor recommendation"
+    scenarios.ai.sap.com/description: "Train the vendor recommendation model using Random Forest"
     executables.ai.sap.com/name: "Vendor Reco (RF Model)"
+    executables.ai.sap.com/description: "Train model for vendor recommendation"
+    ext.ai.sap.com/islm_executable_type: "train"
+    ext.ai.sap.com/islm_released_version: "true"
   labels:
     scenarios.ai.sap.com/id: "vendor-recommendation"
     ai.sap.com/version: "2.0"
 spec:
   imagePullSecrets:
-    - name: bhuni
+    - name: bhuni  # if your image needs auth, otherwise remove this
   entrypoint: mypipeline
   templates:
     - name: mypipeline
@@ -22,7 +24,7 @@ spec:
 
     - name: vendor-reco-step
       container:
-        image: docker.io/bhuni/vendor-final-app:latest
+        image: docker.io/bhuni/vendor-final-app:latest  # ✅ Your Docker image
         command: ["/bin/sh", "-c"]
         args:
-          - "python /app/src/app.py"
+          - "python /app/src/app.py"  # ✅ Entry point of training
