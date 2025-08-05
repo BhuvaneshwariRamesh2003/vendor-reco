@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: code-pipeline  # ✅ Executable ID, used in SDK
+  name:  vendor-reco-train-pipeline # ✅ Executable ID, used in SDK
   annotations:
     scenarios.ai.sap.com/name: "vendor-recommendation"
     scenarios.ai.sap.com/description: "Train the vendor recommendation model using Random Forest"
