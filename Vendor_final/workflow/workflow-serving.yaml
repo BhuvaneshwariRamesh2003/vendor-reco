@@ -1,5 +1,5 @@
 apiVersion: argoproj.io/v1alpha1
-kind: ServingTemplate
+kind: WorkflowTemplate 
 metadata:
   name: vendor-serving-pipeline  # must match executable_id in config.create()
   annotations:
