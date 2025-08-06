@@ -1,18 +1,20 @@
 apiVersion: argoproj.io/v1alpha1
 kind: WorkflowTemplate
 metadata:
-  name: vendor-serving-pipeline  # <--- This must match executable_id in config.create()
+  name: vendor-serving-pipeline  # must match executable_id in config.create()
   annotations:
-    scenarios.ai.sap.com/description: "Vendor Recommendation Serving Pipeline"
     scenarios.ai.sap.com/name: "vendor-recommendation"
-    executables.ai.sap.com/description: "Serve model for vendor recommendation"
+    scenarios.ai.sap.com/description: "Vendor Recommendation Serving Pipeline"
     executables.ai.sap.com/name: "Vendor Reco Serving"
+    executables.ai.sap.com/description: "Serve model for vendor recommendation"
+    ext.ai.sap.com/islm_executable_type: "infer"  # ✅ Mark as serving (infer) executable
+    ext.ai.sap.com/islm_released_version: "true"  # optional but recommended
   labels:
     scenarios.ai.sap.com/id: "vendor-recommendation"
     ai.sap.com/version: "2.0"
 spec:
   imagePullSecrets:
-    - name: bhuni
+    - name: bhuni  # if your Docker image needs auth
   entrypoint: servepipeline
   templates:
     - name: servepipeline
@@ -22,7 +24,7 @@ spec:
 
     - name: vendor-reco-serve
       container:
-        image: docker.io/bhuni/vendor-final-app:latest
+        image: docker.io/bhuni/vendor-final-app:latest  # Your serving image
         command: ["/bin/sh", "-c"]
         args:
           - "python /app/src/app.py"
