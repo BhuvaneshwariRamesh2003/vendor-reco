@@ -1,16 +1,17 @@
 apiVersion: ai.sap.com/v1alpha1
 kind: WorkflowServingTemplate
 metadata:
-  name: vendor-reco-serving
+  name: vendor-reco-serving         # must be unique and match what you refer to in configurations
   annotations:
-    scenarios.ai.sap.com/name: "vendor-recommendation"
-    executables.ai.sap.com/name: "vendor-reco-serve-pipeline"
+    scenarios.ai.sap.com/name: "vendor-recommendation"   # your scenario name
+    executables.ai.sap.com/name: "vendor-reco-serve-pipeline"  # your serving executable ID
 spec:
-  workflow:
-    entrypoint: main
-    templates:
-      - name: main
-        container:
-          image: docker.io/bhuni/vendor-reco-app:latest
-          command: ["python"]
-          args: ["serve.py"]
+  image: "docker.io/bhuni/vendor-reco-app:latest"        # serving docker image
+  command: ["python", "serve.py"]                        # your serving entrypoint
+  resources:
+    limits:
+      cpu: "1"
+      memory: "1Gi"
+    requests:
+      cpu: "0.5"
+      memory: "512Mi"
