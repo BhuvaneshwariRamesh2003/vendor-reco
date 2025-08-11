@@ -1,5 +1,5 @@
 apiVersion: ai.sap.com/v1alpha1
-kind: ServingTemplate
+kind: WorkflowTemplate
 metadata:
   name: vendor-reco-serve
   annotations:
@@ -16,3 +16,4 @@ spec:
     limits:
       memory: 2Gi
       cpu: 1
+
