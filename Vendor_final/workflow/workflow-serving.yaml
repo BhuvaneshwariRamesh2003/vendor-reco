@@ -1,5 +1,5 @@
-apiVersion: argoproj.io/v1alpha1
-kind: WorkflowTemplate 
+apiVersion: ai.sap.com/v1alpha1
+kind: WorkflowServingTemplate
 metadata:
   name: vendor-reco-serve-pipeline   # ✅ Unique name for serving executable
   annotations:
