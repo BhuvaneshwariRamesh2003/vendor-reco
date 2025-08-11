@@ -5,16 +5,12 @@ metadata:
   annotations:
     scenarios.ai.sap.com/name: "vendor-recommendation"
     executables.ai.sap.com/name: "vendor-reco-serve-pipeline"
-    ai.sap.com/description: "Vendor recommendation serving workflow"
 spec:
-  image: docker.io/bhuni/vendor-reco-app:latest
-  command: [ "python" ]
-  args: [ "serve.py" ]
-  resources:
-    limits:
-      cpu: "1"
-      memory: "2Gi"
-  replicas: 1
-  ports:
-    - name: http
-      containerPort: 8080
+  workflow:
+    entrypoint: main
+    templates:
+      - name: main
+        container:
+          image: docker.io/bhuni/vendor-reco-app:latest
+          command: ["python"]
+          args: ["serve.py"]
