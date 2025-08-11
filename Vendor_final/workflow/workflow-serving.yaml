@@ -1,17 +1,33 @@
-apiVersion: ai.sap.com/v1alpha1
-kind: WorkflowServingTemplate
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate 
 metadata:
-  name: vendor-reco-serving         # must be unique and match what you refer to in configurations
+  name: vendor-reco-serve-pipeline   # ✅ Unique name for serving executable
   annotations:
-    scenarios.ai.sap.com/name: "vendor-recommendation"   # your scenario name
-    executables.ai.sap.com/name: "vendor-reco-serve-pipeline"  # your serving executable ID
+    scenarios.ai.sap.com/name: "vendor-recommendation"
+    scenarios.ai.sap.com/description: "Vendor Recommendation Serving Pipeline"
+    executables.ai.sap.com/name: "Vendor Reco Serving"
+    executables.ai.sap.com/description: "Serve model for vendor recommendation"
+    ext.ai.sap.com/islm_executable_type: "infer"   # Marks this as a serving (inference) executable
+    ext.ai.sap.com/islm_released_version: "true"
+  labels:
+    scenarios.ai.sap.com/id: "vendor-recommendation"
+    ai.sap.com/version: "2.0"
 spec:
-  image: "docker.io/bhuni/vendor-reco-app:latest"        # serving docker image
-  command: ["python", "serve.py"]                        # your serving entrypoint
-  resources:
-    limits:
-      cpu: "1"
-      memory: "1Gi"
-    requests:
-      cpu: "0.5"
-      memory: "512Mi"
+  imagePullSecrets:
+    - name: bhuni    # Remove if image is public
+  entrypoint: servepipeline
+  templates:
+    - name: servepipeline
+      steps:
+        - - name: serve-model
+            template: vendor-reco-serve-step
+
+    - name: vendor-reco-serve-step
+      container:
+        image: docker.io/bhuni/vendor-final-app:latest   # Your serving Docker image
+        command: ["python"]
+        args:
+          - /app/src/app.py    # Entry point script for inference API
+        ports:
+          - name: http
+            containerPort: 8080
